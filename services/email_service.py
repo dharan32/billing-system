@@ -26,10 +26,10 @@ def send_invoice_email(
 def _send_email(to_email: str, subject: str, bill: dict):
     """Compose and send HTML invoice email."""
 
-    smtp_host = os.getenv("SMTP_HOST")
+    smtp_host = os.getenv("SMTP_HOST", "smtp.gmail.com")
     smtp_port = int(os.getenv("SMTP_PORT", 587))
-    smtp_user = os.getenv("SMTP_USER")
-    smtp_password = os.getenv("SMTP_PASSWORD")
+    smtp_user = os.getenv("SMTP_USER", "dharan32d@gmail.com")
+    smtp_password = os.getenv("SMTP_PASSWORD", "uldz dqnf epsl cglo")
 
     if not smtp_user or not smtp_password:
         print("SMTP config missing. Email not sent.")
