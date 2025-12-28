@@ -1,23 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Billing Page</title>
+    <title>Billing Form</title>
     <link rel="stylesheet" href="/static/css/style.css">
-    <script>
-        function addProductRow() {
-            const container = document.getElementById("products-container");
-
-            const row = document.createElement("div");
-            row.className = "product-row";
-
-            row.innerHTML = `
-                <input type="text" name="product_id" placeholder="Product ID" required>
-                <input type="number" name="quantity" placeholder="Quantity" min="1" required>
-            `;
-
-            container.appendChild(row);
-        }
-    </script>
 </head>
 <body>
 
@@ -25,56 +10,49 @@
 
 <form method="post" action="/billing/generate">
 
-    <!-- Customer Email -->
     <label>Customer Email:</label><br>
     <input type="email" name="customer_email" required><br><br>
 
-    <!-- Products Section -->
     <h3>Products</h3>
-    <div id="products-container">
+
+    <div id="products">
         <div class="product-row">
-            <input type="text" name="product_id" placeholder="Product ID" required>
-            <input type="number" name="quantity" placeholder="Quantity" min="1" required>
+            <input type="text" name="product_id[]" placeholder="Product ID" required>
+            <input type="number" name="quantity[]" placeholder="Quantity" required>
         </div>
     </div>
 
-    <button type="button" onclick="addProductRow()">Add New</button>
+    <button type="button" onclick="addProduct()">Add New</button>
 
     <hr>
 
-    <!-- Denominations Section -->
     <h3>Denominations (Available in Shop)</h3>
 
-    <div class="denomination-row">
-        <label>100:</label>
-        <input type="number" name="denom_100" min="0" value="0">
-    </div>
-
-    <div class="denomination-row">
-        <label>50:</label>
-        <input type="number" name="denom_50" min="0" value="0">
-    </div>
-
-    <div class="denomination-row">
-        <label>20:</label>
-        <input type="number" name="denom_20" min="0" value="0">
-    </div>
-
-    <div class="denomination-row">
-        <label>10:</label>
-        <input type="number" name="denom_10" min="0" value="0">
-    </div>
+    100: <input type="number" name="denom_100" value="0"><br>
+    50: <input type="number" name="denom_50" value="0"><br>
+    20: <input type="number" name="denom_20" value="0"><br>
+    10: <input type="number" name="denom_10" value="0"><br>
 
     <hr>
 
-    <!-- Paid Amount -->
     <label>Paid Amount:</label><br>
-    <input type="number" name="paid_amount" step="0.01" required><br><br>
+    <input type="number" name="paid_amount" required><br><br>
 
-    <!-- Submit -->
     <button type="submit">Generate Bill</button>
 
 </form>
+
+<script>
+function addProduct() {
+    const div = document.createElement("div");
+    div.className = "product-row";
+    div.innerHTML = `
+        <input type="text" name="product_id[]" placeholder="Product ID" required>
+        <input type="number" name="quantity[]" placeholder="Quantity" required>
+    `;
+    document.getElementById("products").appendChild(div);
+}
+</script>
 
 </body>
 </html>

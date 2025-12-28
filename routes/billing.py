@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Request, Form, HTTPException, BackgroundTasks
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
+from typing import List
 
 from __init__ import get_db
 from models import Product, Purchase, PurchaseItem
@@ -23,28 +24,42 @@ def show_billing_page(request: Request):
 
 @router.post("/generate")
 def generate_bill(
-        request: Request,
-        background_tasks: BackgroundTasks,
-        customer_email: str = Form(...),
-        product_id: str = Form(...),
-        quantity: int = Form(...),
-        denom_100: int = Form(0),
-        denom_50: int = Form(0),
-        denom_20: int = Form(0),
-        denom_10: int = Form(0),
-        paid_amount: float = Form(...),
-        db: Session = Depends(get_db)
+    request: Request,
+    background_tasks: BackgroundTasks,
+
+    customer_email: str = Form(...),
+
+    product_id: List[str] = Form(...),
+    quantity: List[int] = Form(...),
+
+    denom_100: int = Form(0),
+    denom_50: int = Form(0),
+    denom_20: int = Form(0),
+    denom_10: int = Form(0),
+
+    paid_amount: float = Form(...),
+
+    db: Session = Depends(get_db)
 ):
     """Generate bill, save purchase, calculate balance, and send invoice email."""
 
+    if len(product_id) != len(quantity):
+        raise HTTPException(
+            status_code=400,
+            detail="Product IDs and quantities count mismatch"
+        )
+
+
+    items = []
+    for i in range(len(product_id)):
+        items.append({
+            "product_id": product_id[i],
+            "quantity": quantity[i]
+        })
+
     billing_request = {
         "customer_email": customer_email,
-        "items": [
-            {
-                "product_id": product_id,
-                "quantity": quantity
-            }
-        ],
+        "items": items,
         "denominations": [
             {"value": 100, "count": denom_100},
             {"value": 50, "count": denom_50},
