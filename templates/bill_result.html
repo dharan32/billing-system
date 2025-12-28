@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoice</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<h2>Invoice</h2>
+
+<p><strong>Customer Email:</strong> {{ bill["customer_email"] }}</p>
+
+<hr>
+
+<h3>Purchased Items</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Tax (%)</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in bill["items"] %}
+        <tr>
+            <td>{{ item["product_id"] }}</td>
+            <td>{{ item["quantity"] }}</td>
+            <td>{{ item["unit_price"] }}</td>
+            <td>{{ item["tax_percentage"] }}</td>
+            <td>{{ item["subtotal"] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="summary">
+    <p><strong>Total Amount:</strong> {{ bill["total_amount"] }}</p>
+    <p><strong>Paid Amount:</strong> {{ bill["paid_amount"] }}</p>
+    <p><strong>Balance Amount:</strong> {{ bill["balance_amount"] }}</p>
+</div>
+
+<hr>
+
+<h3>Balance Denominations</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Denomination</th>
+            <th>Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in balance_denominations %}
+        <tr>
+            <td>{{ d["value"] }}</td>
+            <td>{{ d["count"] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Purchase History</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<h2>Customer Purchase History</h2>
+
+<!-- Search by Email -->
+<form method="get" action="/purchases">
+    <label>Customer Email:</label>
+    <input type="email" name="email" required>
+    <button type="submit">Search</button>
+</form>
+
+<hr>
+
+{% if purchases %}
+    {% for purchase in purchases %}
+        <h3>Purchase ID: {{ purchase.id }}</h3>
+        <p>
+            <strong>Date:</strong> {{ purchase.created_at }}<br>
+            <strong>Total Amount:</strong> {{ purchase.total_amount }}<br>
+            <strong>Paid Amount:</strong> {{ purchase.paid_amount }}<br>
+            <strong>Balance:</strong> {{ purchase.balance_amount }}
+        </p>
+
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr>
+                <th>Product ID</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Tax (%)</th>
+                <th>Subtotal</th>
+            </tr>
+            {% for item in purchase.items %}
+            <tr>
+                <td>{{ item.product_id }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.unit_price }}</td>
+                <td>{{ item.tax_percentage }}</td>
+                <td>{{ item.subtotal }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <hr>
+    {% endfor %}
+{% else %}
+    <p>No purchases found.</p>
+{% endif %}
+
+</body>
+</html>
